@@ -2,8 +2,11 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { AnimeNavBar } from "@/components/ui/anime-navbar"
+import { LetterSwapForward } from "@/components/ui/letter-swap"
+import { Home, Briefcase, FolderOpen, Award, Mail } from 'lucide-react'
 
-export default function Home() {
+export default function Portfolio() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
@@ -36,8 +39,38 @@ export default function Home() {
     setIsDark(!isDark)
   }
 
+  const navItems = [
+    {
+      name: "Home",
+      url: "#intro",
+      icon: Home,
+    },
+    {
+      name: "Projects",
+      url: "#projects",
+      icon: FolderOpen,
+    },
+    {
+      name: "Work",
+      url: "#work",
+      icon: Briefcase,
+    },
+    {
+      name: "Achievements",
+      url: "#achievements",
+      icon: Award,
+    },
+    {
+      name: "Connect",
+      url: "#connect",
+      icon: Mail,
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-background text-foreground relative">
+      <AnimeNavBar items={navItems} defaultActive="Home" />
+
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
           {["intro", "projects", "work", "achievements", "connect"].map((section) => (
@@ -64,9 +97,19 @@ export default function Home() {
               <div className="space-y-3 sm:space-y-2">
                 <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-                  Likheet
+                  <LetterSwapForward 
+                    label="Likheet" 
+                    staggerFrom="first"
+                    className="inline-flex"
+                  />
                   <br />
-                  <span className="text-muted-foreground">Shetty</span>
+                  <span className="text-muted-foreground">
+                    <LetterSwapForward 
+                      label="Shetty" 
+                      staggerFrom="first"
+                      className="inline-flex"
+                    />
+                  </span>
                 </h1>
               </div>
 
@@ -337,13 +380,15 @@ export default function Home() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { name: "GitHub", handle: "@likheetshetty", url: "#" },
-                  { name: "LinkedIn", handle: "Likheet Shetty", url: "#" },
-                  { name: "HackerRank", handle: "@likheetshetty", url: "#" },
+                  { name: "GitHub", handle: "@Likheet", url: "https://github.com/Likheet" },
+                  { name: "LinkedIn", handle: "Likheet Shetty", url: "https://www.linkedin.com/in/likheet-shetty" },
+                  { name: "HackerRank", handle: "@likheetshetty", url: "https://www.hackerrank.com/profile/likheetshetty" },
                 ].map((social) => (
                   <Link
                     key={social.name}
                     href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
                   >
                     <div className="space-y-2">
