@@ -4,8 +4,7 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { AnimeNavBar } from "@/components/ui/anime-navbar"
 import { LetterSwapForward } from "@/components/ui/letter-swap"
-import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight, ExternalLink, Send } from 'lucide-react'
-import { sendEmail } from "./actions/send-email"
+import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight, ExternalLink } from 'lucide-react'
 import ContactForm from "@/components/ui/contact-form"
 
 export default function Portfolio() {
@@ -13,10 +12,6 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   
-  const [isProjectsExpanded, setIsProjectsExpanded] = useState(false)
-  const [isWorkExpanded, setIsWorkExpanded] = useState(false)
-  const [isAchievementsExpanded, setIsAchievementsExpanded] = useState(false)
-
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark)
   }, [isDark])
@@ -56,33 +51,6 @@ export default function Portfolio() {
     document.startViewTransition(switchTheme)
   }
 
-  const handleViewMoreProjects = () => {
-    setIsProjectsExpanded(!isProjectsExpanded)
-    if (!isProjectsExpanded) {
-      setTimeout(() => {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }, 100)
-    }
-  }
-
-  const handleViewMoreWork = () => {
-    setIsWorkExpanded(!isWorkExpanded)
-    if (!isWorkExpanded) {
-      setTimeout(() => {
-        document.getElementById('work')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }, 100)
-    }
-  }
-
-  const handleViewMoreAchievements = () => {
-    setIsAchievementsExpanded(!isAchievementsExpanded)
-    if (!isAchievementsExpanded) {
-      setTimeout(() => {
-        document.getElementById('achievements')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }, 100)
-    }
-  }
-
   const navItems = [
     {
       name: "Home",
@@ -108,51 +76,6 @@ export default function Portfolio() {
       name: "Connect",
       url: "#connect",
       icon: Mail,
-    },
-  ]
-
-  const additionalProjects = [
-    {
-      name: "E-Commerce Platform",
-      description: "Built a full-stack e-commerce platform with user authentication, product management, shopping cart functionality, and payment integration. Implemented responsive design and optimized performance for smooth user experience.",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      link: "#",
-    },
-    {
-      name: "Weather Forecast App",
-      description: "Created a weather forecast application that provides real-time weather data and 7-day forecasts. Integrated with OpenWeather API and implemented location-based services for automatic weather detection.",
-      tech: ["JavaScript", "React", "OpenWeather API", "CSS"],
-      link: "#",
-    },
-  ]
-
-  const additionalWork = [
-    {
-      year: "2022",
-      role: "Full Stack Developer Intern",
-      company: "Tech Solutions Inc.",
-      location: "Bangalore, India",
-      period: "Jan 2022 – Jun 2022",
-      description: "Contributed to the development of internal tools and client-facing applications. Collaborated with cross-functional teams to deliver high-quality software solutions.",
-      tech: ["React", "Node.js", "PostgreSQL", "Docker"],
-    },
-  ]
-
-  const additionalAchievements = [
-    {
-      title: "MATLAB Onramp Certification",
-      description: "Successfully completed the MATLAB Onramp course, showcasing a solid foundation in MATLAB programming and computational thinking.",
-      category: "Certification",
-    },
-    {
-      title: "Volunteer - Waste Management Awareness",
-      description: "Volunteered at a local government school to increase awareness on Proper Waste Management and Disposal, contributing to environmental education.",
-      category: "Community Service",
-    },
-    {
-      title: "BLS Certified",
-      description: "Save a Life BLS Certified, demonstrating commitment to public safety and emergency response preparedness.",
-      category: "Health & Safety",
     },
   ]
 
@@ -275,17 +198,11 @@ export default function Portfolio() {
           </div>
         </header>
 
-        <section
-          id="projects"
-          ref={(el) => (sectionsRef.current[1] = el)}
-          className="min-h-screen py-20 sm:py-32 opacity-0"
-        >
+        <section id="projects" ref={(el) => (sectionsRef.current[1] = el)} className="min-h-screen py-20 sm:py-32 opacity-0">
           <div className="space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <Link href="/projects" className="group">
-                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
-                  My Projects
-                </h2>
+                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">My Projects</h2>
               </Link>
             </div>
 
@@ -321,77 +238,27 @@ export default function Portfolio() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
+                  className="group block p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
                 >
                   <div className="space-y-4">
                     <div className="flex items-start justify-between gap-4">
-                      <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                        {project.name}
-                      </h3>
+                      <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">{project.name}</h3>
                       <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-shrink-0" />
                     </div>
-                    
                     <p className="text-muted-foreground leading-relaxed">{project.description}</p>
-
                     <div className="flex flex-wrap gap-2 pt-2">
                       {project.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 text-xs border border-border rounded-full text-muted-foreground"
-                        >
-                          {tech}
-                        </span>
+                        <span key={tech} className="px-3 py-1 text-xs border border-border rounded-full text-muted-foreground">{tech}</span>
                       ))}
                     </div>
                   </div>
                 </a>
               ))}
-
-              <div 
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  isProjectsExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="space-y-8 sm:space-y-12">
-                  {additionalProjects.map((project, index) => (
-                    <div
-                      key={`additional-${index}`}
-                      className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
-                    >
-                      <div className="space-y-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                            {project.name}
-                          </h3>
-                        </div>
-                        
-                        <p className="text-muted-foreground leading-relaxed">{project.description}</p>
-
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          {project.tech.map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-3 py-1 text-xs border border-border rounded-full text-muted-foreground"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
 
             <div className="flex justify-center pt-8">
-              <Link 
-                href="/projects"
-                className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
-              >
-                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  View All Projects
-                </span>
+              <Link href="/projects" className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">View All Projects</span>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
               </Link>
             </div>
@@ -414,86 +281,34 @@ export default function Portfolio() {
             </div>
 
             <div className="space-y-8 sm:space-y-12">
-              {[
-                {
-                  year: "2023",
-                  role: "SDE Intern",
-                  company: "DesiQna",
-                  location: "Remote, India",
-                  period: "Jul 2023 – Dec 2023",
-                  description: "Worked on the Design and Development part of a fully responsive webpage for a particular section of DesiQnA. Worked on User Verification/Authentication + Engineering challenges of detecting and removing the fake bots and posts. Integrated Recaptcha with the website - Google Layer of Protection for websites.",
-                  tech: ["HTML", "CSS", "JavaScript", "Bootstrap", "MySQL"],
-                },
-              ].map((job, index) => (
-                <div
-                  key={index}
-                  className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
-                >
-                  <div className="lg:col-span-2">
-                    <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                      {job.year}
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 space-y-3">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                      <div className="text-muted-foreground">{job.company}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{job.period} • {job.location}</div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
-                  </div>
-
-                  <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
-                    {job.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+              <div
+                className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
+              >
+                <div className="lg:col-span-2">
+                  <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                    2023
                   </div>
                 </div>
-              ))}
 
-              <div 
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  isWorkExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                {additionalWork.map((job, index) => (
-                  <div
-                    key={`additional-${index}`}
-                    className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
-                  >
-                    <div className="lg:col-span-2">
-                      <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                        {job.year}
-                      </div>
-                    </div>
-
-                    <div className="lg:col-span-6 space-y-3">
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                        <div className="text-muted-foreground">{job.company}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{job.period} • {job.location}</div>
-                      </div>
-                      <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
-                    </div>
-
-                    <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
-                      {job.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                <div className="lg:col-span-6 space-y-3">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-medium">SDE Intern</h3>
+                    <div className="text-muted-foreground">DesiQna</div>
+                    <div className="text-xs text-muted-foreground mt-1">Jul 2023 – Dec 2023 • Remote, India</div>
                   </div>
-                ))}
+                  <p className="text-muted-foreground leading-relaxed max-w-lg">Worked on the Design and Development part of a fully responsive webpage for a particular section of DesiQnA. Worked on User Verification/Authentication + Engineering challenges of detecting and removing the fake bots and posts. Integrated Recaptcha with the website - Google Layer of Protection for websites.</p>
+                </div>
+
+                <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
+                  {["HTML", "CSS", "JavaScript", "Bootstrap", "MySQL"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -573,33 +388,6 @@ export default function Portfolio() {
                   </div>
                 </article>
               ))}
-
-              <div 
-                className={`lg:col-span-2 overflow-hidden transition-all duration-500 ease-in-out ${
-                  isAchievementsExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
-                  {additionalAchievements.map((achievement, index) => (
-                    <article
-                      key={`additional-${index}`}
-                      className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
-                    >
-                      <div className="space-y-4">
-                        <div className="text-xs text-muted-foreground font-mono">
-                          {achievement.category}
-                        </div>
-
-                        <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                          {achievement.title}
-                        </h3>
-
-                        <p className="text-muted-foreground leading-relaxed">{achievement.description}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </div>
             </div>
 
             <div className="flex justify-center pt-8">
@@ -727,7 +515,6 @@ export default function Portfolio() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
             <div className="space-y-2">
               <div className="text-sm text-muted-foreground">© 2025 Likheet Shetty. All rights reserved.</div>
-              <div className="text-xs text-muted-foreground">Built with v0.dev</div>
             </div>
 
             <div className="flex items-center gap-4">
