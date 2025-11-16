@@ -4,12 +4,18 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { AnimeNavBar } from "@/components/ui/anime-navbar"
 import { LetterSwapForward } from "@/components/ui/letter-swap"
-import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight } from 'lucide-react'
+import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight, ExternalLink, Send } from 'lucide-react'
+import { sendEmail } from "./actions/send-email"
+import ContactForm from "@/components/ui/contact-form"
 
 export default function Portfolio() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
+  
+  const [isProjectsExpanded, setIsProjectsExpanded] = useState(false)
+  const [isWorkExpanded, setIsWorkExpanded] = useState(false)
+  const [isAchievementsExpanded, setIsAchievementsExpanded] = useState(false)
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark)
@@ -36,7 +42,45 @@ export default function Portfolio() {
   }, [])
 
   const toggleTheme = () => {
-    setIsDark(!isDark)
+    const switchTheme = () => {
+      setIsDark(!isDark)
+    }
+
+    // Check if browser supports View Transitions API
+    if (!document.startViewTransition) {
+      switchTheme()
+      return
+    }
+
+    // Use View Transitions API for smooth animated transition
+    document.startViewTransition(switchTheme)
+  }
+
+  const handleViewMoreProjects = () => {
+    setIsProjectsExpanded(!isProjectsExpanded)
+    if (!isProjectsExpanded) {
+      setTimeout(() => {
+        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 100)
+    }
+  }
+
+  const handleViewMoreWork = () => {
+    setIsWorkExpanded(!isWorkExpanded)
+    if (!isWorkExpanded) {
+      setTimeout(() => {
+        document.getElementById('work')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 100)
+    }
+  }
+
+  const handleViewMoreAchievements = () => {
+    setIsAchievementsExpanded(!isAchievementsExpanded)
+    if (!isAchievementsExpanded) {
+      setTimeout(() => {
+        document.getElementById('achievements')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 100)
+    }
   }
 
   const navItems = [
@@ -67,9 +111,82 @@ export default function Portfolio() {
     },
   ]
 
+  const additionalProjects = [
+    {
+      name: "E-Commerce Platform",
+      description: "Built a full-stack e-commerce platform with user authentication, product management, shopping cart functionality, and payment integration. Implemented responsive design and optimized performance for smooth user experience.",
+      tech: ["React", "Node.js", "MongoDB", "Stripe"],
+      link: "#",
+    },
+    {
+      name: "Weather Forecast App",
+      description: "Created a weather forecast application that provides real-time weather data and 7-day forecasts. Integrated with OpenWeather API and implemented location-based services for automatic weather detection.",
+      tech: ["JavaScript", "React", "OpenWeather API", "CSS"],
+      link: "#",
+    },
+  ]
+
+  const additionalWork = [
+    {
+      year: "2022",
+      role: "Full Stack Developer Intern",
+      company: "Tech Solutions Inc.",
+      location: "Bangalore, India",
+      period: "Jan 2022 – Jun 2022",
+      description: "Contributed to the development of internal tools and client-facing applications. Collaborated with cross-functional teams to deliver high-quality software solutions.",
+      tech: ["React", "Node.js", "PostgreSQL", "Docker"],
+    },
+  ]
+
+  const additionalAchievements = [
+    {
+      title: "MATLAB Onramp Certification",
+      description: "Successfully completed the MATLAB Onramp course, showcasing a solid foundation in MATLAB programming and computational thinking.",
+      category: "Certification",
+    },
+    {
+      title: "Volunteer - Waste Management Awareness",
+      description: "Volunteered at a local government school to increase awareness on Proper Waste Management and Disposal, contributing to environmental education.",
+      category: "Community Service",
+    },
+    {
+      title: "BLS Certified",
+      description: "Save a Life BLS Certified, demonstrating commitment to public safety and emergency response preparedness.",
+      category: "Health & Safety",
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       <AnimeNavBar items={navItems} defaultActive="Home" />
+
+      <button
+        onClick={toggleTheme}
+        className="fixed top-24 right-6 z-50 group p-3 rounded-lg border border-border bg-background hover:border-muted-foreground/50 transition-all duration-300 shadow-sm"
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <svg
+            className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414 0zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ) : (
+          <svg
+            className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        )}
+      </button>
 
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
@@ -165,7 +282,11 @@ export default function Portfolio() {
         >
           <div className="space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">My Projects</h2>
+              <Link href="/projects" className="group">
+                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
+                  My Projects
+                </h2>
+              </Link>
             </div>
 
             <div className="space-y-8 sm:space-y-12">
@@ -174,36 +295,40 @@ export default function Portfolio() {
                   name: "Credit Card Fraud Detection",
                   description: "Developed fraud detection model using ensemble methods (Random Forest, Gradient Boosting) to enhance identification of fraudulent transactions. Applied SMOTE and Near-Miss algorithms for class balancing, improving performance on rare fraud detection cases. Compared 6+ machine learning models, including Logistic Regression, k-NN, and Stacking Classifier to determine the best-performing model.",
                   tech: ["Python", "NumPy", "Pandas", "Scikit-Learn"],
-                  link: "#",
+                  link: "https://github.com/Likheet/Fraud-Detection-ML",
                 },
                 {
                   name: "Pathfinding Algorithms Visualiser",
                   description: "Developed a visualizer for pathfinding algorithms, implementing Depth-First Search (DFS), Breadth-First Search (BFS), A*, and Dijkstra's algorithms. A fully interactive website that allows users to create custom mazes and visually observe the selected algorithm solving the maze in real-time.",
                   tech: ["HTML", "JavaScript", "CSS", "Vis.js"],
-                  link: "#",
+                  link: "https://github.com/Likheet/pathfinding-algorithm",
                 },
                 {
                   name: "AI News App",
                   description: "Built a Voice-Controlled News Application using Alan AI to enable seamless voice interaction and real-time news fetching. Integrated full voice navigation for tasks like fetching news, opening articles, and app navigation with human-like responses. Utilized React for the front-end, Material-UI for designing components, and JavaScript for implementing functionality.",
                   tech: ["Alan AI", "React", "Material-UI", "CSS"],
-                  link: "#",
+                  link: "https://github.com/Likheet/AI-News-App",
                 },
                 {
                   name: "Stack-It!",
                   description: "Developed an interactive web-based game using HTML, CSS, and JavaScript. Utilized Three.js and Cannon.js libraries for rendering 3D graphics and physics simulations. Implemented autopilot mode for automatic gameplay and a 500ms input cooldown for enhanced user experience.",
                   tech: ["HTML", "CSS", "JavaScript", "Three.js", "Cannon.js"],
-                  link: "#",
+                  link: "https://github.com/Likheet/stack-game",
                 },
               ].map((project, index) => (
-                <div
+                <a
                   key={index}
-                  className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
                 >
                   <div className="space-y-4">
                     <div className="flex items-start justify-between gap-4">
                       <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
                         {project.name}
                       </h3>
+                      <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-shrink-0" />
                     </div>
                     
                     <p className="text-muted-foreground leading-relaxed">{project.description}</p>
@@ -219,17 +344,56 @@ export default function Portfolio() {
                       ))}
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
+
+              <div 
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isProjectsExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="space-y-8 sm:space-y-12">
+                  {additionalProjects.map((project, index) => (
+                    <div
+                      key={`additional-${index}`}
+                      className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
+                            {project.name}
+                          </h3>
+                        </div>
+                        
+                        <p className="text-muted-foreground leading-relaxed">{project.description}</p>
+
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {project.tech.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-3 py-1 text-xs border border-border rounded-full text-muted-foreground"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-center pt-8">
-              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+              <Link 
+                href="/projects"
+                className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+              >
                 <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  View More Projects
+                  View All Projects
                 </span>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -241,7 +405,11 @@ export default function Portfolio() {
         >
           <div className="space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
+              <Link href="/work" className="group">
+                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
+                  Selected Work
+                </h2>
+              </Link>
               <div className="text-sm text-muted-foreground font-mono">2023</div>
             </div>
 
@@ -288,15 +456,57 @@ export default function Portfolio() {
                   </div>
                 </div>
               ))}
+
+              <div 
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isWorkExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                {additionalWork.map((job, index) => (
+                  <div
+                    key={`additional-${index}`}
+                    className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
+                  >
+                    <div className="lg:col-span-2">
+                      <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                        {job.year}
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-6 space-y-3">
+                      <div>
+                        <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
+                        <div className="text-muted-foreground">{job.company}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{job.period} • {job.location}</div>
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
+                    </div>
+
+                    <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
+                      {job.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="flex justify-center pt-8">
-              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+              <Link 
+                href="/work"
+                className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+              >
                 <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  View More Experience
+                  View All Experience
                 </span>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -307,7 +517,11 @@ export default function Portfolio() {
           className="min-h-screen py-20 sm:py-32 opacity-0"
         >
           <div className="space-y-12 sm:space-y-16">
-            <h2 className="text-3xl sm:text-4xl font-light">Achievements</h2>
+            <Link href="/achievements" className="group inline-block">
+              <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
+                Achievements
+              </h2>
+            </Link>
 
             <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
               {[
@@ -359,15 +573,45 @@ export default function Portfolio() {
                   </div>
                 </article>
               ))}
+
+              <div 
+                className={`lg:col-span-2 overflow-hidden transition-all duration-500 ease-in-out ${
+                  isAchievementsExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+                  {additionalAchievements.map((achievement, index) => (
+                    <article
+                      key={`additional-${index}`}
+                      className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
+                    >
+                      <div className="space-y-4">
+                        <div className="text-xs text-muted-foreground font-mono">
+                          {achievement.category}
+                        </div>
+
+                        <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
+                          {achievement.title}
+                        </h3>
+
+                        <p className="text-muted-foreground leading-relaxed">{achievement.description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-center pt-8">
-              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+              <Link 
+                href="/achievements"
+                className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+              >
                 <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                   View All Achievements
                 </span>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -399,34 +643,82 @@ export default function Portfolio() {
                   </Link>
                   <div className="text-muted-foreground text-sm">+91-8904090247</div>
                 </div>
+
+                <div className="space-y-4 pt-4">
+                  <div className="text-sm text-muted-foreground font-mono">MY LINKS</div>
+                  <div className="flex items-center gap-4">
+                    <Link
+                      href="https://github.com/Likheet"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                      aria-label="GitHub"
+                    >
+                      <svg
+                        className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                    </Link>
+
+                    <Link
+                      href="https://www.linkedin.com/in/likheet/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                      aria-label="LinkedIn"
+                    >
+                      <svg
+                        className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    </Link>
+
+                    <Link
+                      href="https://www.instagram.com/likheetshetty/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                      aria-label="Instagram"
+                    >
+                      <svg
+                        className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.057-1.644.069-4.85.069-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.948 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                    </Link>
+
+                    <Link
+                      href="https://www.kaggle.com/likheet"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                      aria-label="Kaggle"
+                    >
+                      <svg
+                        className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.358"/>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="space-y-6 sm:space-y-8">
-              <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
+              <div className="text-sm text-muted-foreground font-mono">SEND A MESSAGE</div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { name: "GitHub", handle: "@Likheet", url: "https://github.com/Likheet" },
-                  { name: "LinkedIn", handle: "Likheet Shetty", url: "https://www.linkedin.com/in/likheet-shetty" },
-                  { name: "HackerRank", handle: "@likheetshetty", url: "https://www.hackerrank.com/profile/likheetshetty" },
-                ].map((social) => (
-                  <Link
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
-                  >
-                    <div className="space-y-2">
-                      <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
-                        {social.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">{social.handle}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              <ContactForm />
             </div>
           </div>
         </section>
@@ -439,7 +731,7 @@ export default function Portfolio() {
             </div>
 
             <div className="flex items-center gap-4">
-              <button
+              <button 
                 onClick={toggleTheme}
                 className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
                 aria-label="Toggle theme"
@@ -452,7 +744,7 @@ export default function Portfolio() {
                   >
                     <path
                       fillRule="evenodd"
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414 0zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
                       clipRule="evenodd"
                     />
                   </svg>
@@ -466,28 +758,10 @@ export default function Portfolio() {
                   </svg>
                 )}
               </button>
-
-              <button className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300">
-                <svg
-                  className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
         </footer>
       </main>
-
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
     </div>
   )
 }
