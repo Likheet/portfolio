@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
-import { Type as type, LucideIcon } from 'lucide-react'
+import { Type as type, type LucideIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -52,12 +52,28 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
         setIsVisible(false)
       }
 
+      const sections = items.map(item => ({
+        name: item.name,
+        element: document.querySelector(item.url)
+      }))
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i].element
+        if (section) {
+          const rect = section.getBoundingClientRect()
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            setActiveTab(sections[i].name)
+            break
+          }
+        }
+      }
+
       setLastScrollY(currentScrollY)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
+  }, [lastScrollY, items])
 
   if (!mounted) return null
 
