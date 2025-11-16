@@ -2,21 +2,18 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { useTheme } from "next-themes"
 import { AnimeNavBar } from "@/components/ui/anime-navbar"
 import { LetterSwapForward } from "@/components/ui/letter-swap"
-import { DotScreenShader } from "@/components/ui/dot-shader-background"
-import { Home, Briefcase, FolderOpen, Award, Mail } from 'lucide-react'
+import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight } from 'lucide-react'
 
 export default function Portfolio() {
-  const { theme, setTheme } = useTheme()
+  const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    document.documentElement.classList.toggle("dark", isDark)
+  }, [isDark])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,7 +36,7 @@ export default function Portfolio() {
   }, [])
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
+    setIsDark(!isDark)
   }
 
   const navItems = [
@@ -93,14 +90,9 @@ export default function Portfolio() {
         <header
           id="intro"
           ref={(el) => (sectionsRef.current[0] = el)}
-          className="min-h-screen flex items-center opacity-0 relative"
+          className="min-h-screen flex items-center opacity-0"
         >
-          {/* Shader Background */}
-          <div className="absolute inset-0 -mx-6 sm:-mx-8 lg:-mx-16 -left-[50vw] -right-[50vw] ml-[50%] mr-[50%] w-screen">
-            <DotScreenShader />
-          </div>
-
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full relative z-10">
+          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
                 <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
@@ -230,6 +222,15 @@ export default function Portfolio() {
                 </div>
               ))}
             </div>
+
+            <div className="flex justify-center pt-8">
+              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  View More Projects
+                </span>
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
+              </button>
+            </div>
           </div>
         </section>
 
@@ -287,6 +288,15 @@ export default function Portfolio() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="flex justify-center pt-8">
+              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  View More Experience
+                </span>
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
+              </button>
             </div>
           </div>
         </section>
@@ -349,6 +359,15 @@ export default function Portfolio() {
                   </div>
                 </article>
               ))}
+            </div>
+
+            <div className="flex justify-center pt-8">
+              <button className="group flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  View All Achievements
+                </span>
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all duration-300" />
+              </button>
             </div>
           </div>
         </section>
@@ -425,7 +444,7 @@ export default function Portfolio() {
                 className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
                 aria-label="Toggle theme"
               >
-                {mounted && theme === 'dark' ? (
+                {isDark ? (
                   <svg
                     className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
                     fill="currentColor"
