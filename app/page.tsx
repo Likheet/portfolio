@@ -2,18 +2,21 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { useTheme } from "next-themes"
 import { AnimeNavBar } from "@/components/ui/anime-navbar"
 import { LetterSwapForward } from "@/components/ui/letter-swap"
+import { DotScreenShader } from "@/components/ui/dot-shader-background"
 import { Home, Briefcase, FolderOpen, Award, Mail } from 'lucide-react'
 
 export default function Portfolio() {
-  const [isDark, setIsDark] = useState(true)
+  const { theme, setTheme } = useTheme()
   const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [isDark])
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,7 +39,7 @@ export default function Portfolio() {
   }, [])
 
   const toggleTheme = () => {
-    setIsDark(!isDark)
+    setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
   const navItems = [
@@ -90,9 +93,14 @@ export default function Portfolio() {
         <header
           id="intro"
           ref={(el) => (sectionsRef.current[0] = el)}
-          className="min-h-screen flex items-center opacity-0"
+          className="min-h-screen flex items-center opacity-0 relative"
         >
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
+          {/* Shader Background */}
+          <div className="absolute inset-0 -mx-6 sm:-mx-8 lg:-mx-16 -left-[50vw] -right-[50vw] ml-[50%] mr-[50%] w-screen">
+            <DotScreenShader />
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full relative z-10">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
                 <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
@@ -417,7 +425,7 @@ export default function Portfolio() {
                 className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
                 aria-label="Toggle theme"
               >
-                {isDark ? (
+                {mounted && theme === 'dark' ? (
                   <svg
                     className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
                     fill="currentColor"
