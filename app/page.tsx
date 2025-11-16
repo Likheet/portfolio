@@ -198,7 +198,7 @@ export default function Portfolio() {
                 <div className="space-y-2">
                   <div className="text-foreground">B.E. (ECE) Student</div>
                   <div className="text-muted-foreground">@ RV Institute of Technology & Management</div>
-                  <div className="text-xs text-muted-foreground">2021 — 2025 • CGPA: 8.52</div>
+                  <div className="text-xs text-muted-foreground">2021 — 2025 • CGPA: 8.92</div>
                 </div>
               </div>
 
