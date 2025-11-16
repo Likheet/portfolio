@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
-import { type LucideIcon } from 'lucide-react'
+import { Type as type, LucideIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -25,6 +25,8 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
   const [hoveredTab, setHoveredTab] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<string>(defaultActive)
   const [isMobile, setIsMobile] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     setMounted(true)
@@ -40,6 +42,23 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      if (currentScrollY < lastScrollY) {
+        setIsVisible(true)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [lastScrollY])
+
   if (!mounted) return null
 
   return (
@@ -48,7 +67,10 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
         <motion.div 
           className="flex items-center gap-3 bg-black/50 border border-white/10 backdrop-blur-lg py-2 px-2 rounded-full shadow-lg relative"
           initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          animate={{ 
+            y: isVisible ? 0 : -20, 
+            opacity: isVisible ? 1 : 0 
+          }}
           transition={{
             type: "spring",
             stiffness: 260,
