@@ -2,11 +2,22 @@
 
 import Link from "next/link"
 import { ArrowLeft } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function AchievementsPage() {
+  const [isDark, setIsDark] = useState(true)
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
+    setIsDark(document.documentElement.classList.contains('dark'))
+  }, [])
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
   }, [])
 
   const allAchievements = [
@@ -78,7 +89,7 @@ export default function AchievementsPage() {
   const categories = Array.from(new Set(allAchievements.map((a) => a.category)))
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground" style={{ backgroundColor: isDark ? 'rgb(24, 24, 27)' : '#fafafa' }}>
       <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 py-20">
         <Link
           href="/"

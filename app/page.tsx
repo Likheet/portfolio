@@ -39,8 +39,9 @@ export default function Portfolio() {
   }, [])
 
   const toggleTheme = () => {
+    const newTheme = !isDark
     const switchTheme = () => {
-      setIsDark(!isDark)
+      setIsDark(newTheme)
     }
 
     // Check if browser supports View Transitions API
