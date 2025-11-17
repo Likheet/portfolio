@@ -78,8 +78,8 @@ export default function ProjectsPage() {
 
         <div className="space-y-12">
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-light">All Projects</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="text-5xl sm:text-6xl font-bold">All Projects</h1>
+            <p className="text-lg sm:text-xl font-extralight text-muted-foreground leading-relaxed">
               A comprehensive collection of my software development projects, spanning machine learning, web
               development, and interactive applications.
             </p>

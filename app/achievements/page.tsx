@@ -101,8 +101,8 @@ export default function AchievementsPage() {
 
         <div className="space-y-12">
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-light">Achievements</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="text-5xl sm:text-6xl font-bold">Achievements</h1>
+            <p className="text-lg sm:text-xl font-extralight text-muted-foreground leading-relaxed">
               A comprehensive list of certifications, competitive programming achievements, and community contributions.
             </p>
           </div>
