@@ -2,8 +2,10 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { motion } from "framer-motion"
 import { AnimeNavBar } from "@/components/ui/anime-navbar"
 import { LetterSwapForward } from "@/components/ui/letter-swap"
+import { AuroraBackground } from "@/components/ui/aurora-background"
 import { Home, Briefcase, FolderOpen, Award, Mail, ArrowRight, ExternalLink } from 'lucide-react'
 import ContactForm from "@/components/ui/contact-form"
 
@@ -147,26 +149,36 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-        <header
-          id="intro"
-          ref={(el) => (sectionsRef.current[0] = el)}
-          className="min-h-screen flex items-center opacity-0"
+      <AuroraBackground
+        id="intro"
+        ref={(el) => (sectionsRef.current[0] = el)}
+        className="opacity-0"
+        isDark={isDark}
+      >
+        <motion.div
+          initial={{ opacity: 0.0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="relative w-full max-w-4xl mx-auto px-6 sm:px-8 lg:px-16"
         >
           <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-                  <LetterSwapForward 
-                    label="Likheet" 
+                <div className="text-sm font-mono tracking-wider dark:text-neutral-200">PORTFOLIO / 2025</div>
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight dark:text-white text-foreground">
+                  <LetterSwapForward
+                    label="Likheet"
                     staggerFrom="first"
                     className="inline-flex"
                   />
                   <br />
-                  <span className="text-muted-foreground">
-                    <LetterSwapForward 
-                      label="Shetty" 
+                  <span className="dark:text-neutral-200">
+                    <LetterSwapForward
+                      label="Shetty"
                       staggerFrom="first"
                       className="inline-flex"
                     />
@@ -175,14 +187,14 @@ export default function Portfolio() {
               </div>
 
               <div className="space-y-6 max-w-md">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                <p className="text-lg sm:text-xl font-extralight dark:text-neutral-200 text-foreground leading-relaxed">
                   Software Engineer specializing in
-                  <span className="text-foreground"> AI/ML</span>,<span className="text-foreground"> Full-Stack Development</span>,
+                  <span className="font-normal dark:text-white text-foreground"> AI/ML</span>,<span className="font-normal dark:text-white text-foreground"> Full-Stack Development</span>,
                   and
-                  <span className="text-foreground"> Cloud Computing</span>.
+                  <span className="font-normal dark:text-white text-foreground"> Cloud Computing</span>.
                 </p>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground dark:text-neutral-200">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     Available for work
@@ -194,21 +206,21 @@ export default function Portfolio() {
 
             <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
+                <div className="text-sm dark:text-neutral-200 font-mono">CURRENTLY</div>
                 <div className="space-y-2">
-                  <div className="text-foreground">B.E. (ECE) Student</div>
-                  <div className="text-muted-foreground">@ RV Institute of Technology & Management</div>
-                  <div className="text-xs text-muted-foreground">2021 — 2025 • CGPA: 8.92</div>
+                  <div className="text-foreground dark:text-white font-medium">B.E. (ECE) Student</div>
+                  <div className="dark:text-neutral-200">@ RV Institute of Technology & Management</div>
+                  <div className="text-xs dark:text-neutral-200">2021 — 2025 • CGPA: 8.92</div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
+                <div className="text-sm dark:text-neutral-200 font-mono">FOCUS</div>
                 <div className="flex flex-wrap gap-2">
                   {["Python", "C++", "Azure AI", "GCP", "Machine Learning"].map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
+                      className="px-3 py-1 text-xs border border-border dark:border-neutral-600 rounded-full hover:border-muted-foreground/50 transition-colors duration-300 dark:text-neutral-200"
                     >
                       {skill}
                     </span>
@@ -217,7 +229,10 @@ export default function Portfolio() {
               </div>
             </div>
           </div>
-        </header>
+        </motion.div>
+      </AuroraBackground>
+
+      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
 
         <section id="projects" ref={(el) => (sectionsRef.current[1] = el)} className="min-h-screen py-20 sm:py-32 opacity-0">
           <div className="space-y-12 sm:space-y-16">
