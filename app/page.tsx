@@ -28,7 +28,7 @@ export default function Portfolio() {
           }
         })
       },
-      { threshold: 0.3, rootMargin: "0px 0px -20% 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px 0px 0px" },
     )
 
     sectionsRef.current.forEach((section) => {
@@ -90,7 +90,7 @@ export default function Portfolio() {
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
+    <div className="min-h-screen text-foreground relative" style={{ backgroundColor: isDark ? 'rgb(24, 24, 27)' : '#fafafa' }}>
       <AnimeNavBar items={navItems} defaultActive="Home" />
 
       <button
@@ -136,7 +136,7 @@ export default function Portfolio() {
                 }`}
               />
               <span
-                className={`text-sm font-mono tracking-wider transition-all duration-500 ${
+                className={`text-sm tracking-wider transition-all duration-500 ${
                   activeSection === section.id 
                     ? "text-foreground opacity-70 translate-x-0" 
                     : "text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-70 group-hover:translate-x-0"
@@ -169,7 +169,7 @@ export default function Portfolio() {
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
                 <div
-                  className="text-sm font-mono tracking-wider"
+                  className="text-sm tracking-wider font-medium"
                   style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
                 >
                   PORTFOLIO / 2025
@@ -232,7 +232,7 @@ export default function Portfolio() {
             <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
               <div className="space-y-4">
                 <div
-                  className="text-sm font-mono"
+                  className="text-sm font-medium"
                   style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
                 >
                   CURRENTLY
@@ -260,7 +260,7 @@ export default function Portfolio() {
 
               <div className="space-y-4">
                 <div
-                  className="text-sm font-mono"
+                  className="text-sm font-medium"
                   style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
                 >
                   FOCUS
@@ -291,13 +291,13 @@ export default function Portfolio() {
         </motion.div>
       </AuroraBackground>
 
-      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
+      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16" style={{ backgroundColor: isDark ? 'rgb(24, 24, 27)' : '#fafafa' }}>
 
         <section id="projects" ref={(el) => (sectionsRef.current[1] = el)} className="min-h-screen py-20 sm:py-32 opacity-0">
           <div className="space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <Link href="/projects" className="group">
-                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">My Projects</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold group-hover:text-muted-foreground transition-colors duration-300">My Projects</h2>
               </Link>
             </div>
 
@@ -368,11 +368,11 @@ export default function Portfolio() {
           <div className="space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <Link href="/work" className="group">
-                <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
+                <h2 className="text-3xl sm:text-4xl font-bold group-hover:text-muted-foreground transition-colors duration-300">
                   Selected Work
                 </h2>
               </Link>
-              <div className="text-sm text-muted-foreground font-mono">2023</div>
+              <div className="text-sm text-muted-foreground font-medium">2023</div>
             </div>
 
             <div className="space-y-8 sm:space-y-12">
@@ -428,7 +428,7 @@ export default function Portfolio() {
         >
           <div className="space-y-12 sm:space-y-16">
             <Link href="/achievements" className="group inline-block">
-              <h2 className="text-3xl sm:text-4xl font-light group-hover:text-muted-foreground transition-colors duration-300">
+              <h2 className="text-3xl sm:text-4xl font-bold group-hover:text-muted-foreground transition-colors duration-300">
                 Achievements
               </h2>
             </Link>
@@ -471,7 +471,7 @@ export default function Portfolio() {
                   className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg"
                 >
                   <div className="space-y-4">
-                    <div className="text-xs text-muted-foreground font-mono">
+                    <div className="text-xs text-muted-foreground font-medium">
                       {achievement.category}
                     </div>
 
@@ -502,7 +502,7 @@ export default function Portfolio() {
         <section id="connect" ref={(el) => (sectionsRef.current[4] = el)} className="py-20 sm:py-32 opacity-0">
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
             <div className="space-y-6 sm:space-y-8">
-              <h2 className="text-3xl sm:text-4xl font-light">Let's Connect</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold">Let's Connect</h2>
 
               <div className="space-y-6">
                 <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
@@ -528,7 +528,7 @@ export default function Portfolio() {
                 </div>
 
                 <div className="space-y-4 pt-4">
-                  <div className="text-sm text-muted-foreground font-mono">MY LINKS</div>
+                  <div className="text-sm text-muted-foreground font-medium">MY LINKS</div>
                   <div className="flex items-center gap-4">
                     <Link
                       href="https://github.com/Likheet"
@@ -599,7 +599,7 @@ export default function Portfolio() {
             </div>
 
             <div className="space-y-6 sm:space-y-8">
-              <div className="text-sm text-muted-foreground font-mono">SEND A MESSAGE</div>
+              <div className="text-sm text-muted-foreground font-medium">SEND A MESSAGE</div>
 
               <ContactForm />
             </div>

@@ -28,49 +28,31 @@ export const AuroraBackground = forwardRef<HTMLDivElement, AuroraBackgroundProps
     }
   }, [forwardedRef]);
 
-  // Track when element becomes visible
+  // Track when element becomes visible using IntersectionObserver instead of interval
   useEffect(() => {
     if (!internalRef.current || hasBeenVisible) return;
 
-    const checkVisibility = () => {
-      if (internalRef.current) {
-        const computedStyle = window.getComputedStyle(internalRef.current);
-        const opacity = parseFloat(computedStyle.opacity);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0) {
+            setHasBeenVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-        // If opacity is greater than 0.5, element has been shown
-        if (opacity > 0.5) {
-          setHasBeenVisible(true);
-        }
-      }
-    };
+    observer.observe(internalRef.current);
 
-    // Check immediately and set up interval to detect when intersection observer makes it visible
-    checkVisibility();
-    const interval = setInterval(checkVisibility, 100);
-
-    return () => clearInterval(interval);
+    return () => observer.disconnect();
   }, [hasBeenVisible]);
 
-  // Force repaint when theme changes while preserving visibility
+  // Simplified theme change handling
   useEffect(() => {
     if (internalRef.current && hasBeenVisible) {
-      // Remove opacity-0 class permanently once element has been visible
       internalRef.current.classList.remove('opacity-0');
-
-      // Force the element to be fully visible with !important to override any classes
-      internalRef.current.style.setProperty('opacity', '1', 'important');
-
-      // Trigger reflow/repaint to force browser to recalculate gradients
-      internalRef.current.style.transform = 'translateZ(0)';
-      void internalRef.current.offsetHeight; // Force reflow
-      internalRef.current.style.transform = '';
-
-      // Clean up inline style after repaint
-      requestAnimationFrame(() => {
-        if (internalRef.current) {
-          internalRef.current.style.removeProperty('opacity');
-        }
-      });
     }
   }, [isDark, hasBeenVisible]);
 
@@ -94,20 +76,28 @@ export const AuroraBackground = forwardRef<HTMLDivElement, AuroraBackgroundProps
             [--aurora:repeating-linear-gradient(100deg,var(--blue-500)_10%,var(--indigo-300)_15%,var(--blue-300)_20%,var(--violet-200)_25%,var(--blue-400)_30%)]
             [background-size:300%,_200%]
             [background-position:50%_50%,50%_50%]
-            filter blur-[10px]
             after:content-[""] after:absolute after:inset-0
             after:[background-size:200%,_100%]
-            after:[animation:aurora_60s_linear_infinite] after:[background-attachment:fixed] after:mix-blend-difference
+            after:[animation:aurora_60s_linear_infinite] after:mix-blend-difference
             pointer-events-none
-            absolute -inset-[10px] opacity-50 will-change-transform`,
+            absolute -inset-[10px] opacity-50 will-change-[background-position]`,
             isDark
-              ? `[background-image:var(--dark-gradient),var(--aurora)] after:[background-image:var(--dark-gradient),var(--aurora)]`
-              : `[background-image:var(--white-gradient),var(--aurora)] invert after:[background-image:var(--white-gradient),var(--aurora)]`,
+              ? `[background-image:var(--dark-gradient),var(--aurora)] after:[background-image:var(--dark-gradient),var(--aurora)] [filter:blur(10px)]`
+              : `[background-image:var(--white-gradient),var(--aurora)] invert after:[background-image:var(--white-gradient),var(--aurora)] [filter:blur(10px)]`,
             showRadialGradient &&
               `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`
           )}
         ></div>
       </div>
+      {/* Gradient fade to next section */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{
+          background: isDark 
+            ? 'linear-gradient(to bottom, transparent 0%, rgb(24, 24, 27) 100%)'
+            : 'linear-gradient(to bottom, transparent 0%, #fafafa 100%)'
+        }}
+      />
       {children}
     </div>
   );
