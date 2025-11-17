@@ -163,20 +163,30 @@ export default function Portfolio() {
             duration: 0.8,
             ease: "easeInOut",
           }}
-          className="relative w-full max-w-4xl mx-auto px-6 sm:px-8 lg:px-16"
+          className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 isolate"
         >
           <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm font-mono tracking-wider dark:text-neutral-200">PORTFOLIO / 2025</div>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight dark:text-white text-foreground">
+                <div
+                  className="text-sm font-mono tracking-wider"
+                  style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
+                >
+                  PORTFOLIO / 2025
+                </div>
+                <h1
+                  className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight"
+                  style={{ color: isDark ? '#ffffff' : '#0a0a0a' }}
+                >
                   <LetterSwapForward
                     label="Likheet"
                     staggerFrom="first"
                     className="inline-flex"
                   />
                   <br />
-                  <span className="dark:text-neutral-200">
+                  <span
+                    style={{ color: isDark ? '#e5e5e5' : '#171717' }}
+                  >
                     <LetterSwapForward
                       label="Shetty"
                       staggerFrom="first"
@@ -187,14 +197,29 @@ export default function Portfolio() {
               </div>
 
               <div className="space-y-6 max-w-md">
-                <p className="text-lg sm:text-xl font-extralight dark:text-neutral-200 text-foreground leading-relaxed">
+                <p
+                  className="text-lg sm:text-xl font-extralight leading-relaxed"
+                  style={{ color: isDark ? '#e5e5e5' : '#171717' }}
+                >
                   Software Engineer specializing in
-                  <span className="font-normal dark:text-white text-foreground"> AI/ML</span>,<span className="font-normal dark:text-white text-foreground"> Full-Stack Development</span>,
+                  <span
+                    className="font-normal"
+                    style={{ color: isDark ? '#ffffff' : '#0a0a0a' }}
+                  > AI/ML</span>,<span
+                    className="font-normal"
+                    style={{ color: isDark ? '#ffffff' : '#0a0a0a' }}
+                  > Full-Stack Development</span>,
                   and
-                  <span className="font-normal dark:text-white text-foreground"> Cloud Computing</span>.
+                  <span
+                    className="font-normal"
+                    style={{ color: isDark ? '#ffffff' : '#0a0a0a' }}
+                  > Cloud Computing</span>.
                 </p>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground dark:text-neutral-200">
+                <div
+                  className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm"
+                  style={{ color: isDark ? '#e5e5e5' : '#262626' }}
+                >
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     Available for work
@@ -206,21 +231,55 @@ export default function Portfolio() {
 
             <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
               <div className="space-y-4">
-                <div className="text-sm dark:text-neutral-200 font-mono">CURRENTLY</div>
+                <div
+                  className="text-sm font-mono"
+                  style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
+                >
+                  CURRENTLY
+                </div>
                 <div className="space-y-2">
-                  <div className="text-foreground dark:text-white font-medium">B.E. (ECE) Student</div>
-                  <div className="dark:text-neutral-200">@ RV Institute of Technology & Management</div>
-                  <div className="text-xs dark:text-neutral-200">2021 — 2025 • CGPA: 8.92</div>
+                  <div
+                    className="font-medium"
+                    style={{ color: isDark ? '#ffffff' : '#0a0a0a' }}
+                  >
+                    B.E. (ECE) Student
+                  </div>
+                  <div
+                    style={{ color: isDark ? '#e5e5e5' : '#171717' }}
+                  >
+                    @ RV Institute of Technology & Management
+                  </div>
+                  <div
+                    className="text-xs"
+                    style={{ color: isDark ? '#e5e5e5' : '#262626' }}
+                  >
+                    2021 — 2025 • CGPA: 8.92
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <div className="text-sm dark:text-neutral-200 font-mono">FOCUS</div>
+                <div
+                  className="text-sm font-mono"
+                  style={{ color: isDark ? '#e5e5e5' : '#0a0a0a' }}
+                >
+                  FOCUS
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {["Python", "C++", "Azure AI", "GCP", "Machine Learning"].map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 text-xs border border-border dark:border-neutral-600 rounded-full hover:border-muted-foreground/50 transition-colors duration-300 dark:text-neutral-200"
+                      className="px-3 py-1 text-xs border rounded-full transition-colors duration-300"
+                      style={{
+                        color: isDark ? '#e5e5e5' : '#0a0a0a',
+                        borderColor: isDark ? '#525252' : '#d4d4d4'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = isDark ? '#a3a3a3' : '#737373'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = isDark ? '#525252' : '#d4d4d4'
+                      }}
                     >
                       {skill}
                     </span>
